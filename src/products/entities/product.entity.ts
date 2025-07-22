@@ -1,3 +1,4 @@
+import { IsOptional } from "class-validator";
 import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -24,7 +25,6 @@ export class Product {
 
     @Column('text', {
         unique: true,
-        nullable: true,
     })
     slug: string;
 
@@ -41,6 +41,11 @@ export class Product {
     @Column('text')
     gender: string;
 
+    @Column('text', {
+        array: true,
+        default: [],
+    })
+    tags: string[];
 
 
     @BeforeInsert()
@@ -55,6 +60,12 @@ export class Product {
                 .replaceAll("'", '');
     };
 
-    // @BeforeUpdate()
+    @BeforeUpdate()
+    checkSlugUpdate(){
+        this.slug = this.slug
+            .toLocaleLowerCase()
+            .replaceAll(' ', '_')
+            .replaceAll("'", '');
+    }
 
 }
