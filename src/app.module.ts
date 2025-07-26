@@ -7,11 +7,19 @@ import { SeedModule } from './seed/seed.module';
 import { FilesModule } from './files/files.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
+import * as Joi from 'joi';
 
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+      JWT_SECRET: Joi.string().required(),
+    // Otras variables también
+  }),
+    }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -35,6 +43,8 @@ import { FilesModule } from './files/files.module';
     SeedModule,
 
     FilesModule,
+
+    AuthModule,
   ],
   controllers: [],
   providers: [],
