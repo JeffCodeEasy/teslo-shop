@@ -69,6 +69,15 @@ export class AuthService {
 
   }
 
+
+  async checkAuthStatus(user: User){
+    return {
+      ...user,
+      token: this.getJwToken({id: user.id})
+    };
+  }
+
+
   private getJwToken(payload: JwtPayload){
 
     const token = this.jwtService.sign(payload);
